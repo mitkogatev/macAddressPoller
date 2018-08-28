@@ -1,6 +1,7 @@
 package program.factories;
 
 import program.constants.BaseConstants;
+import program.helpers.Converter;
 import program.models.switches.Switch;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,10 +14,11 @@ public class SwitchFactory implements ISwitchFactory {
         if(template==null||BaseConstants.LINE_IS_EMPTY.equals(template)){
             template=BaseConstants.GENERIC_SWITCH_STR;
         }
+        template=Converter.convertToPascalCase(template);
 
         try {
             swClass=Class.forName(BaseConstants.SWITCH_MODEL_PATH+template+BaseConstants.SWITCH_STR);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException |NoClassDefFoundError e) {
             // TODO: 26.8.2018 г. print msg template not found trying generic
             try {
                 swClass=Class.forName(BaseConstants.SWITCH_MODEL_PATH+BaseConstants.GENERIC_SWITCH_STR);

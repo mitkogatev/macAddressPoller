@@ -15,8 +15,6 @@ public class Validator {
         if(obj.toString().isEmpty()){
             return false;
         }
-       // String target=String.valueOf(obj);
-        //System.out.println(target);
         return true;
     }
 }

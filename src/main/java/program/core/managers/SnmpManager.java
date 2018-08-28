@@ -19,7 +19,7 @@ public class SnmpManager implements ISnmpManager {
     @Override
     public String walkMac(Switch sw) {
 
-        if(CustomSnmpConstants.MSG_FAILED.equals(this.snmpWalk.setArgs(sw.getCommunity(), sw.getIp(), sw.getMacOid()))){
+        if(CustomSnmpConstants.MSG_FAILED.equals(this.snmpWalk.setArgs(CustomSnmpConstants.PARAM_COMMUNITY+sw.getCommunity(), sw.getIp(), sw.getMacOid()))){
             return CustomSnmpConstants.MSG_INVALID_ARGS;
         }
 

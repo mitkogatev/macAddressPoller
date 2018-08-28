@@ -1,0 +1,11 @@
+* 2018-08-28
+    - Upon implementing Cisco model I'm thinking "Should I move snmpWalk methods inside the Switch interface?
+        So I could just do `(manger.getSwById(id)).walk[Mac|IfStatus]` per device?". So...
+        Let's see:
+            For the generic switches you just walk the mac oid and get results.
+            For cisco switches you need to pass vlan number to the community and iterate over vlans.
+            For tp-link... Oh... shortly: consider each (brand)model has it's own mac OID.
+        So... every model should have it's own mac poller implementation... Yes, It must be done this way.
+    - Mentioning "device" above reminded me that the poller could be extended to use any snmpEnabled device e.g wifi router...
+    !(BUGS)
+        SnmpWalk returns empty result if device is unreachable.
