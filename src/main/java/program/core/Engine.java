@@ -18,6 +18,9 @@ public class Engine implements Runnable {
     public void run() {
         int swId=this.superManager.createSwitch("127.0.0.1","public","zyx1",12,"");
         Switch sw =this.superManager.findSwitchById(swId);
-        this.writer.writeLine(this.superManager.walkMac(sw));
+        this.writer.writeLine(sw.pollIfOperStatus());
+        this.writer.writeLine(sw.pollIfAdminStatus());
+        this.writer.writeLine(sw.pollMacs());
+        //this.writer.writeLine(this.superManager.walkMac(sw));
     }
 }

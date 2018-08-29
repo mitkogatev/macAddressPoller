@@ -1,9 +1,13 @@
 package program.models.switches;
 
 import program.constants.BaseConstants;
+import program.constants.CustomSnmpConstants;
 import program.models.ports.IPort;
 import program.models.ports.Port;
+import program.snmp.SnmpOidParser;
+import program.snmp.SnmpWalk;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,13 +19,18 @@ public abstract class AbstractSwitch implements Switch {
     private String community;
     private String name;
     private List<IPort> ports;
-    private Map<String,String> oidStrings;
+     Map<String,String> oidStrings;
+     SnmpWalk snmp;
+     SnmpOidParser parser;
 
     protected AbstractSwitch(int id, String ip, String community, String name, int portCount) {
         this.id=id;
         this.ip=ip;
         this.community=community;
         this.name=name;
+
+
+        this.parser=new SnmpOidParser();
 
         this.createPorts(portCount);
 
@@ -31,6 +40,9 @@ public abstract class AbstractSwitch implements Switch {
         this.oidStrings.put(BaseConstants.IFOPER_OID_KEY,BaseConstants.IFOPER_OID);
         //override if not generic
         this.oidStrings.put(BaseConstants.MAC_OID_KEY,BaseConstants.MAC_OID_GENERIC);
+
+        this.snmp=new SnmpWalk(this.getIp(),CustomSnmpConstants.PARAM_COMMUNITY+this.getCommunity(),this.oidStrings.get(BaseConstants.IFOPER_OID_KEY));
+
     }
 
     private void createPorts(int portCount) {
@@ -39,6 +51,7 @@ public abstract class AbstractSwitch implements Switch {
             this.ports.add(new Port(i));
         }
     }
+
 
     @Override
     public String getMacOid(){
@@ -63,5 +76,26 @@ public abstract class AbstractSwitch implements Switch {
     @Override
     public int getId() {
         return this.id;
+    }
+
+    @Override
+    public String pollIfOperStatus() {
+        //System.out.println(snmp.setArgs(this.getMacOid()));
+        try {
+           return this.parser.parsePlain(this.snmp.walk(this.oidStrings.get(BaseConstants.IFOPER_OID_KEY)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return BaseConstants.LINE_IS_EMPTY;
+    }
+
+    @Override
+    public String pollIfAdminStatus() {
+        try {
+            return this.parser.parsePlain(this.snmp.walk(this.oidStrings.get(BaseConstants.IFADMIN_OID_KEY)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return BaseConstants.LINE_IS_EMPTY;
     }
 }

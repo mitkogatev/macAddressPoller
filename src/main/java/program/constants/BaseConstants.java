@@ -15,6 +15,8 @@ public class BaseConstants {
     public static final String GENERIC_SWITCH_STR="GenericSwitch";
     public static final String SWITCH_MODEL_PATH="program.models.switches.";
     public static final int FIRST_ID=1;
+    public static final String CISCO_VLAN_OID="1.3.6.1.4.1.9.9.46.1.3.1.1.4.1";
+    public static final String AT="@";
 
 
 

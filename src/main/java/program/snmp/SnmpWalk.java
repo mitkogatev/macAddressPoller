@@ -14,6 +14,7 @@ import program.constants.CustomSnmpConstants;
 import program.helpers.Validator;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -91,6 +92,14 @@ public class SnmpWalk {
         return CustomSnmpConstants.MSG_SUCCESS;
     }
 
+    public List<VariableBinding> walk(String oid) throws IOException {
+        if(Validator.isValidStr(oid)){
+            this.oidStr=oid;
+            return this.snmpWalkInit();
+        }
+        return new ArrayList<>();
+    }
+
     //int
     public List<VariableBinding> snmpWalkInit() throws IOException, NullPointerException {
         Address targetAddress = GenericAddress.parse("udp:" + this.targetAddr + "/" + this.snmpPortNum);
@@ -109,11 +118,11 @@ public class SnmpWalk {
 
         oid = new OID(translateNameToOID(this.oidStr));
 
-        return (this.walk(snmp, target, oid));
+        return (this.poll(snmp, target, oid));
 
     }
 
-    private List<VariableBinding> walk(Snmp snmp, Target target, OID oid) {
+    private List<VariableBinding> poll(Snmp snmp, Target target, OID oid) {
         // Get MIB data.
         TreeUtils treeUtils = new TreeUtils(snmp, new DefaultPDUFactory());
         List<TreeEvent> events = treeUtils.getSubtree(target, oid);

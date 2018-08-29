@@ -1,3 +1,12 @@
+* 2018-08-29
+    - I was thinking of rewriting SnmpWalk class to be cli like(snmpwalk -v -c ip oid), to avoid call of setArgs,
+        but that way every time a new Instance must be made. So for now I'll stick to what I've got.
+    - Don't really like calling updateVlans() in CiscoSwitch every time pollMacs() is called.
+    !(BUGS)
+        A lot of methods are returning empty String!
+    ?(TODO)
+        Replace those empty Strings with Exceptions.
+
 * 2018-08-28
     - Upon implementing Cisco model I'm thinking "Should I move snmpWalk methods inside the Switch interface?
         So I could just do `(manger.getSwById(id)).walk[Mac|IfStatus]` per device?". So...
