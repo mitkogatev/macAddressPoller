@@ -17,6 +17,8 @@ public class BaseConstants {
     public static final int FIRST_ID=1;
     public static final String CISCO_VLAN_OID="1.3.6.1.4.1.9.9.46.1.3.1.1.4.1";
     public static final String AT="@";
+    public static final String SYS_ID_OID="1.3.6.1.2.1.1.2";
+    public static final String TPLINK_MAC_PART_OID=".2.3.2.2.1.3";
 
 
 

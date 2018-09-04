@@ -1,3 +1,9 @@
+<h3>2018-09-04</h3>
+<ul>
+<li>
+Partly implemented <a href="https://github.com/mitkogatev/macAddressPoller/blob/master/src/main/java/program/models/switches/TplinkSwitch.java">TplinkSwitch</a> Template.
+</li>
+</ul>
 <h3>2018-08-29</h3>
 <ul>
 <li>

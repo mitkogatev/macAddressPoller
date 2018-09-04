@@ -1,9 +1,6 @@
 package program.snmp;
 
-import org.snmp4j.CommunityTarget;
-import org.snmp4j.Snmp;
-import org.snmp4j.Target;
-import org.snmp4j.TransportMapping;
+import org.snmp4j.*;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.smi.*;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
@@ -89,6 +86,7 @@ public class SnmpWalk {
         if (!Validator.isValidStr(this.targetAddr) || !Validator.isValidStr(this.oidStr)) {
             return CustomSnmpConstants.MSG_FAILED;
         }
+
         return CustomSnmpConstants.MSG_SUCCESS;
     }
 
@@ -114,10 +112,10 @@ public class SnmpWalk {
         target.setRetries(3);
         target.setTimeout(1000 * 3);
         target.setVersion(this.snmpVersion);
+
         OID oid;
 
         oid = new OID(translateNameToOID(this.oidStr));
-
         return (this.poll(snmp, target, oid));
 
     }
@@ -125,6 +123,9 @@ public class SnmpWalk {
     private List<VariableBinding> poll(Snmp snmp, Target target, OID oid) {
         // Get MIB data.
         TreeUtils treeUtils = new TreeUtils(snmp, new DefaultPDUFactory());
+        //this is needed for tplink as it returns unordered oids;
+        treeUtils.setIgnoreLexicographicOrder(true);
+
         List<TreeEvent> events = treeUtils.getSubtree(target, oid);
 
         return (this.handleResult(events, snmp, oid));
