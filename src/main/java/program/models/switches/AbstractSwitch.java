@@ -1,5 +1,6 @@
 package program.models.switches;
 
+import org.snmp4j.smi.VariableBinding;
 import program.constants.BaseConstants;
 import program.constants.CustomSnmpConstants;
 import program.models.ports.IPort;
@@ -93,6 +94,16 @@ public abstract class AbstractSwitch implements Switch {
     public String pollIfAdminStatus() {
         try {
             return this.parser.parsePlain(this.snmp.walk(this.oidStrings.get(BaseConstants.IFADMIN_OID_KEY)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return BaseConstants.LINE_IS_EMPTY;
+    }
+    @Override
+    public String pollMacs() {
+        try {
+            List<VariableBinding> res=this.snmp.walk(this.getMacOid());
+            return this.parser.parseMac(this.snmp.walk(this.getMacOid()));
         } catch (IOException e) {
             e.printStackTrace();
         }

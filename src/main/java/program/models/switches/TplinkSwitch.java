@@ -28,17 +28,5 @@ public class TplinkSwitch extends AbstractSwitch {
     public String getMacOid() {
         return this.sysId + BaseConstants.TPLINK_MAC_PART_OID;
     }
-
-    @Override
-    public String pollMacs() {
-        try {
-
-            List<VariableBinding> res=super.snmp.walk(this.getMacOid());
-            return super.parser.parsePlain(super.snmp.walk(this.getMacOid()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return BaseConstants.LINE_IS_EMPTY;
-    }
 }
 

@@ -24,10 +24,32 @@ public class SnmpOidParser {
         for (VariableBinding varBinding : varBindings) {
             OID resultOid = varBinding.getOid();
             String resultSyntaxString = varBinding.getVariable().getSyntaxString();
-            Variable resultVar = varBinding.getVariable();//port
-            result.append(translateOidToMac(resultOid)).append(" port: ").append(varBinding.getVariable()).append(System.lineSeparator());
+            String port = varBinding.getVariable().toString();//port
+            if(port.toLowerCase().contains("port")) {
+                result.append(translateOidToMacTplink(resultOid)).append(" port: ").append(port.toLowerCase().replace("port","")).append(System.lineSeparator());
+            }else{
+                result.append(translateOidToMac(resultOid)).append(" port: ").append(varBinding.getVariable()).append(System.lineSeparator());
+
+            }
         }
         return result.toString();
+    }
+    private String translateOidToMacTplink(OID oid){
+        String oidStr=oid.toString();
+        String[] octets=oidStr.split("\\.");
+        int startIndex=octets.length-7;
+        StringBuilder macAddress=new StringBuilder();
+        for (int i = startIndex; i < octets.length-1; i++) {
+            String hex=Integer.toHexString(Integer.valueOf(octets[i]));
+            if(hex.length()==1){
+                hex="0"+hex;
+            }
+            if(i!=octets.length-2){
+                hex=hex+":";
+            }
+            macAddress.append(hex.toUpperCase());
+        }
+        return "mac: "+ macAddress.toString();
     }
     private String translateOidToMac(OID oid) {
         String oidStr=oid.toString();
